@@ -49,47 +49,63 @@ with open(file_to_load) as election_data:
                 candidate_votes[candidate_name] = 0
             # Add a vote to that candidate's count.
             candidate_votes[candidate_name] += 1
-
-# Determine teh percenage of votes for each candidate by looping through the list
-# Iterate throught the candidate list.
-for candidate_name in candidate_votes:
-    #Retrieve vote count of a candidate.
-    votes = candidate_votes[candidate_name]
-    # Calculate the percentage of votes.
-    vote_percentage = float(votes) / float(total_votes) *100
-
-    if (votes > winning_count) and (vote_percentage > winning_percentage):
-        winning_count = votes
-        winning_percentage = vote_percentage
-        winning_candidate = candidate_name
-
-    # Print out cach candidate's name vote count, and percentage of votes.
-    print(f"{candidate_name}: {vote_percentage:.1f}% ({votes:,})\n")
-winning_candidate_summary = (
-    f"-------------------------\n"
-    f"Winner: {winning_candidate}\n"
-    f"Winning Vote Count: {winning_count:,}\n"
-    f"Winning Percentage: {winning_percentage:.1f}%\n"
-    f"-------------------------\n")
-print(winning_candidate_summary)
-
-# Open the electionresults and read the file.
-with open(file_to_load) as election_data:
-
-    # To do: perform analysis
-    print(election_data)
-
-# Close the file.
-election_data.close()
-
-#Create a fliename variable to a direct or indirect path to the file.
-file_to_save = os.path.join("analysis", "election_analysis.txt")
-#Using the with statement open the file as a text file.
+            
+# Save the results to our txt file.
 with open(file_to_save, "w") as txt_file:
-    #Write three counties to the file.
-    txt_file.write("Arapahoe\nDenver\nJefferson")
-# Close the file 
-txt_file.close()
+    #After opening the file print the final vote count to the terminal.
+    election_results = (
+        f"\nElection Results\n"
+        f"-------------------------\n"
+        f"Total Votes: {total_votes:,}\n"
+        f"-------------------------\n")
+    print(election_results, end="")
+
+    # After printing the final vote count to thte terminal save the final vote
+    txt_file.write(election_results)
+    for candidate_name in candidate_votes:
+        #Retrieve vote count of a candidate.
+        votes = candidate_votes[candidate_name]
+        # Calculate the percentage of votes.
+        vote_percentage = float(votes) / float(total_votes) *100
+        candidate_results = (f"{candidate_name}: {vote_percentage:.1f}% ({votes:,})\n")
+
+        #Printe each candidate's voter count and percentage to the terminal.
+        print(candidate_results)
+        #Save results to text file
+        txt_file.write(candidate_results)
+        #Determine winnign vote count, winning percentage, add winning candiate
+        if (votes > winning_count) and (vote_percentage > winning_percentage):
+            winning_count = votes
+            winning_percentage = vote_percentage
+            winning_candidate = candidate_name
+#Printe the winning candidate's results to the terminal.
+    winning_candidate_summary = (
+        f"-------------------------\n"
+        f"Winner: {winning_candidate}\n"
+        f"Winning Vote Count: {winning_count:,}\n"
+        f"Winning Percentage: {winning_percentage:.1f}%\n"
+        f"-------------------------\n")
+    print(winning_candidate_summary)
+    #Save the winning candidate's results to text file.
+    txt_file.write(winning_candidate_summary)
+
+    # Open the electionresults and read the file.
+    with open(file_to_load) as election_data:
+
+        # To do: perform analysis
+        print(election_data)
+
+    # Close the file.
+    election_data.close()
+
+    #Create a fliename variable to a direct or indirect path to the file.
+    file_to_save = os.path.join("analysis", "election_analysis.txt")
+    #Using the with statement open the file as a text file.
+    with open(file_to_save, "w") as txt_file:
+        #Write three counties to the file.
+        txt_file.write("Arapahoe\nDenver\nJefferson")
+    # Close the file 
+    txt_file.close()
 
 # The data we need to retrieve.
 # 1. The total number of votes cast
